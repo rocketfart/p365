@@ -1,0 +1,46 @@
+import sys
+import collections
+
+line = sys.stdin.readline().split(',')
+start_time = line[0][:4]+line[0][5:]
+end_time = line[1].strip()[:4]+line[1].strip()[5:]
+
+res = collections.defaultdict(list)
+
+line = sys.stdin.readline()
+line = sys.stdin.readline()
+
+while line:
+    new = line.split(',')
+    now_time = new[0][:4]+new[0][5:7]
+    if start_time <= now_time <= end_time:
+        res[now_time].append((new[1], int(new[2])))
+    line = sys.stdin.readline()
+
+
+new_res = {}
+for time in res:
+    for a, b in res[time]:
+        if a not in new_res:
+            new_res[a] = b
+        else:
+            new_res[a] += b
+    res[time] = new_res.items()
+    new_res = {}
+
+for k, v in sorted(res.items())[::-1]:
+    v.sort()
+    sys.stdout.write(k[:4]+'-'+k[4:])
+    for item in v:
+        sys.stdout.write(','+str(item[0])+','+str(item[1]))
+    print ''
+
+
+
+
+
+
+
+
+
+

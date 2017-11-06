@@ -1,0 +1,79 @@
+import sys
+
+
+def for_email(e):
+    res='E:'+e[0]+'*****'+e[e.index('@')-1:]
+    return res
+
+def for_phone(n):
+    res='P:'
+    num=0
+    for c in n:
+        if c.isdigit():
+            num+=1
+    ccode=num-10
+    extra=False
+    if ccode>0:
+        res+='+'
+        extra=True
+    cur=0
+    while cur<len(n) and ccode>0:
+        if n[cur].isdigit():
+            ccode-=1
+        cur+=1
+    if extra:
+        res+='-'
+
+    count=0
+    while cur<len(n) and count<3:
+        if n[cur].isdigit():
+            res+='*'
+            count+=1
+        cur+=1
+    res+='-'
+    count=0
+
+    while cur<len(n) and count<3:
+        if n[cur].isdigit():
+            res+='*'
+            count+=1
+        cur+=1
+    res+='-'
+    count=0
+
+    while cur<len(n) and count<4:
+        if n[cur].isdigit():
+            res+=n[cur]
+            count+=1
+        cur+=1
+
+    return res
+
+
+def phone2(num):
+    res=[]
+    n=0
+    list=[]
+    for i in num:
+        if i.isdigit():
+            n += 1
+            list.append(i)
+    ccode = n-10 if n > 10 else 0
+
+    if ccode:
+        res += ['+']
+        res += list[:ccode]+['-']
+        list = list[ccode:]
+
+    res += ['*']*3+['-']+['*']*3 + ['-'] + list[-4:]
+    return ''.join(res)
+
+if __name__=='__main__':
+    input = sys.stdin.readline()
+    while input:
+        inputs = input.split(':')
+        if inputs[0].strip()=='E':
+            sys.stdout.write(for_email(inputs[1].strip()))
+        elif inputs[0].strip()=='P':
+            sys.stdout.write(phone2(inputs[1].strip()))
+        input = sys.stdin.readline()

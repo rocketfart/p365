@@ -1,0 +1,22 @@
+list1=
+[{'id':'0000', 'value':900},
+{'id':'0001', 'value:850'},
+{'id':'0001', 'value:800'}]
+
+list2=
+[{'id':'0000', 'value':830},
+{'id':'0001', 'value:820'},
+{'id':'0001', 'value:790'}]
+
+m,n=len(list1),len(list2)
+while m and n:
+if list1[m-1]>list2[n-1]:
+list1[m+n-1]=list2[n-1]
+n-=1
+else:
+list1[m+n-1]=list1[m-1]
+m-=1
+if n:
+list1[:n]=list2[:n]
+
+return list1

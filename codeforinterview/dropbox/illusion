@@ -1,0 +1,65 @@
+def solustion(n,lamp,queries):
+    res=[]
+    rowdict={}
+    coldict={}
+    leftdict={}
+    rightdict={}
+    lampset=set()
+    #Store the lamp coordinates into HashSet and update the lamp count in each coordinate
+
+    for l in lamp:
+        lampset.add(l)
+        r,c =l[0],l[1]
+
+        #// Update the row lamp count
+        if r not in rowdict:
+            rowdict[r]=1
+        else:
+            rowdict[r]+=1
+        #// Update the col lamp count
+        if c not in coldict:
+            coldict[c]=1
+        else:
+            coldict[c]+=1
+        #// Update the left diagnoal lamp count
+        if r-c not in leftdict:
+            leftdict[r-c]=1
+        else:
+            leftdict[r-c]+=1
+        #/ Update the right diagonal lamp count
+        if r+c not in rightdict:
+            rightdict[r+c]=1
+        else:
+            rightdict[r+c]+=1
+#		// Iterate each query and update the lamp count in each map (turn off the lamps)
+    for q in queries:
+        r,c=q[0],q[1]
+
+        #// Iterate through the query itself and its neighbours to turn off the lamps
+        for i in range(r-1,r+2):
+            for j in range(c-1,c+1):
+                if i>=1 and i<=n and j>=1 and j<=n:
+                    if (i,j) in lampset:
+                        rowdict[i]-=1
+                        coldict[j]-=1
+                        leftdict[i-j]-=1
+                        rightdict[i+j]-=1
+#// Check whether the grid cell is light or dark after turning off all affected lights
+        if  rowdict[r] or coldict[c] or leftdict[r-c] or rightdict[r+c]:
+            res.append('light')
+        else:
+            res.append('dark')
+        #// Turn on all the lights after examine the cell
+        for i in range(r - 1, r + 2):
+            for j in range(c - 1, c + 1):
+                if i >= 1 and i <= n and j >= 1 and j <= n:
+                    if (i, j) in lampset:
+                        rowdict[i] += 1
+                        coldict[j] += 1
+                        leftdict[i - j] += 1
+                        rightdict[i + j] += 1
+
+
+    return res
+
+

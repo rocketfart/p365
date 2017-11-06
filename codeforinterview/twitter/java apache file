@@ -1,0 +1,92 @@
+private static class LogCount implements Comparable<LogCount> {
+        //private static class LogCount {
+        private String time;
+        private String endpoint;
+        private double success;-google 1point3acres
+        private int total;
+
+        LogCount(String a, String b, boolean success) {
+            this.time = a;
+            this.endpoint = b;
+            this.success = success ? 1 : 0;
+            this.total = 1;
+        }
+
+        @Override
+        public int compareTo(LogCount that) {
+            if (this.time.equals(that.time))
+                return (this.endpoint.compareTo(that.endpoint));
+            return this.time.compareTo(that.time);
+        }
+    }
+
+    private static String timeHelper(String a) {
+        SimpleDateFormat oldFormat = new SimpleDateFormat("[dd/MMM/yyyy:HH:mm:ssZ]");.鐣欏璁哄潧-涓€浜�-涓夊垎鍦�
+
+        try {
+            Date time = oldFormat.parse(a);
+            SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            newFormat.setTimeZone(TimeZone.getTimeZone("GMT")); 鏉ユ簮涓€浜�.涓夊垎鍦拌鍧�.
+            a = newFormat.format(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }. 鍥磋鎴戜滑@1point 3 acres
+
+        return a;
+    }
+
+    private static String endpointHelper(String a) {. 涓€浜�-涓夊垎-鍦帮紝鐙鍙戝竷
+        int paraIdx = a.indexOf("?");
+
+        return paraIdx == -1 ? a : a.substring(0, paraIdx);
+    }. 1point 3acres 璁哄潧
+
+    private static void printLog(PriorityQueue<LogCount> queue) {
+        //print value
+        String currTime = "";
+        LogCount prev = null;
+        while (!queue.isEmpty()) {
+            LogCount lc = queue.poll();
+            String time = lc.time;
+            String endpoint = lc.endpoint;
+            if (prev == null) {
+                prev = lc;
+            } else if (prev.time.equals(time) && prev.endpoint.equals(endpoint)) {. 鐣欏鐢宠璁哄潧-涓€浜╀笁鍒嗗湴
+                prev.success += lc.success;
+                prev.total++;
+            } else {
+                double percentage = prev.success / prev.total * 100;
+                System.out.println(prev.time + " " + prev.endpoint + " " + String.format("%.2f", percentage));
+                prev = lc;
+            }
+        }
+        double percentage = prev.success / prev.total * 100;
+
+        System.out.println(prev.time + " " + prev.endpoint + " " + String.format("%.2f", percentage));
+    }
+
+    public static void main(String args[]) throws Exception {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+        Scanner sc = new Scanner(System.in);
+        String currTime = "";
+        TreeMap<String, Set<LogCount>> map = new TreeMap<>();
+        PriorityQueue<LogCount> queue = new PriorityQueue<>();. visit 1point3acres.com for more.
+        while (sc.hasNextLine()) {
+            String log = sc.nextLine();
+            String[] strs = log.split("\\s+");
+            //read Date
+
+            String time = strs[3] + strs[4];
+            time = timeHelper(time);
+
+            //read endpoint
+            String endpoint = strs[6];
+            endpoint = endpointHelper(endpoint);
+
+            //read success
+            Boolean success = !(Integer.parseInt(strs[8]) / 100 == 5);
+            LogCount lc = new LogCount(time, endpoint, success);
+            queue.offer(lc);
+        }
+        printLog(queue);
+    }
